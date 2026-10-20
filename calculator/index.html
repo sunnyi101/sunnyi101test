@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="calculator">
+    <output class="display" id="display" aria-live="polite">0</output>
+    <div class="keys">
+      <button data-key="C" class="fn">C</button>
+      <button data-key="±" class="fn">±</button>
+      <button data-key="%" class="fn">%</button>
+      <button data-key="/" class="op">÷</button>
+      <button data-key="7">7</button>
+      <button data-key="8">8</button>
+      <button data-key="9">9</button>
+      <button data-key="*" class="op">×</button>
+      <button data-key="4">4</button>
+      <button data-key="5">5</button>
+      <button data-key="6">6</button>
+      <button data-key="-" class="op">−</button>
+      <button data-key="1">1</button>
+      <button data-key="2">2</button>
+      <button data-key="3">3</button>
+      <button data-key="+" class="op">+</button>
+      <button data-key="0" class="zero">0</button>
+      <button data-key=".">.</button>
+      <button data-key="=" class="op">=</button>
+    </div>
+  </main>
+  <script src="calculator.js"></script>
+  <script>
+    const calc = createCalculator();
+    const displayEl = document.getElementById("display");
+    const buttons = document.querySelectorAll("button[data-key]");
+
+    function render() {
+      displayEl.textContent = calc.display;
+      buttons.forEach((b) => b.classList.toggle("active", b.dataset.key === calc.operator));
+    }
+
+    buttons.forEach((b) => b.addEventListener("click", () => { calc.press(b.dataset.key); render(); }));
+
+    document.addEventListener("keydown", (e) => {
+      const map = { x: "*", X: "*", c: "C", Delete: "C" };
+      const key = map[e.key] || e.key;
+      if (/^[0-9.+\-*/=%]$/.test(key) || ["Enter", "Escape", "Backspace", "C"].includes(key)) {
+        e.preventDefault();
+        calc.press(key);
+        render();
+      }
+    });
+  </script>
+</body>
+</html>
